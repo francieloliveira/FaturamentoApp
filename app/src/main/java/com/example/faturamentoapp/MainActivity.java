@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(getApplicationContext(), "Botão clicado!", Toast.LENGTH_SHORT).show();
                 if (!mEditTextValor.getText().toString().isEmpty()) {
                     float valor = Float.parseFloat(mEditTextValor.getText().toString());
                     int ano = mNumberPicker.getValue();
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         mNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
-//                Toast.makeText(getApplicationContext(), "Teste", Toast.LENGTH_SHORT).show();
                 exibirSaldo(newVal);
             }
         });
@@ -82,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         float novoValor = valAtual + valor;
         sharedPreferences.edit().putFloat(String.valueOf(ano), novoValor).apply();
         exibirSaldo(ano);
+        Toast.makeText(getApplicationContext(), "Valor Adicionado: "+valor, Toast.LENGTH_SHORT).show();
     }
 
     private void excluirValor(int ano, float valor){
@@ -94,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             sharedPreferences.edit().putFloat(String.valueOf(ano), novoValor).apply();
         }
         exibirSaldo(ano);
+        Toast.makeText(getApplicationContext(), "Valor Excluído: "+valor, Toast.LENGTH_SHORT).show();
     }
 
     private void exibirSaldo(int ano){

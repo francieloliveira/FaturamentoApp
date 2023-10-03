@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FaturamentoApp</string>
+    <string name="digite_o_valor_aqui">Digite o valor aqui</string>
+    <string name="excluir">Excluir</string>
+    <string name="salvar">Salvar</string>
+    <string name="executar">Executar</string>
 </resources>
