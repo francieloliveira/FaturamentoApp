@@ -4,4 +4,5 @@
     <string name="excluir">Excluir</string>
     <string name="salvar">Salvar</string>
     <string name="executar">Executar</string>
+    <string name="RS">"R$ "</string>
 </resources>

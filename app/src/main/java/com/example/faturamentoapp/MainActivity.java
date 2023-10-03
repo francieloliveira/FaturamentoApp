@@ -80,26 +80,32 @@ public class MainActivity extends AppCompatActivity {
         float novoValor = valAtual + valor;
         sharedPreferences.edit().putFloat(String.valueOf(ano), novoValor).apply();
         exibirSaldo(ano);
-        Toast.makeText(getApplicationContext(), "Valor Adicionado: "+valor, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Valor Adicionado: R$ "+valor, Toast.LENGTH_SHORT).show();
     }
 
-    private void excluirValor(int ano, float valor){
+
+
+    private void excluirValor(int ano, float valor) {
         SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_MEUS_DADOS, Context.MODE_PRIVATE);
-        float valAtual = sharedPreferences.getFloat(String.valueOf(ano),0);
+        String chaveAno = String.valueOf(ano);
+
+        float valAtual = sharedPreferences.getFloat(chaveAno, 0);
         float novoValor = valAtual - valor;
-        if (novoValor < 0 ){
-            novoValor = 0;
-        }else{
-            sharedPreferences.edit().putFloat(String.valueOf(ano), novoValor).apply();
+
+        if (novoValor < 0) {
+            Toast.makeText(getApplicationContext(), "Não é possível ter um valor negativo.", Toast.LENGTH_SHORT).show();
+        } else {
+            sharedPreferences.edit().putFloat(chaveAno, novoValor).apply();
+            exibirSaldo(ano);
+            Toast.makeText(getApplicationContext(), "Valor Excluído: R$ " + valor, Toast.LENGTH_SHORT).show();
         }
-        exibirSaldo(ano);
-        Toast.makeText(getApplicationContext(), "Valor Excluído: "+valor, Toast.LENGTH_SHORT).show();
     }
+
 
     private void exibirSaldo(int ano){
         SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_MEUS_DADOS, Context.MODE_PRIVATE);
         float valAtual = sharedPreferences.getFloat(String.valueOf(ano),0);
-        mTextViewSaldo.setText(String.valueOf(valAtual));
+        mTextViewSaldo.setText(String.format("%s %s", getString(R.string.RS), valAtual));
     }
 
 }
