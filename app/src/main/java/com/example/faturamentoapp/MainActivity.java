@@ -3,6 +3,7 @@ package com.example.faturamentoapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ARQUIVO_MEUS_DADOS = "meusDados";
     private NumberPicker mNumberPicker;
     private Button mButton;
+    private Button mButtonPersonalizar;
     private RadioGroup mRadioGroup;
     private TextView mTextViewSaldo;
     private EditText mEditTextValor;
@@ -28,6 +30,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mButtonPersonalizar = findViewById(R.id.buttonPersonalizar);
+
+        mButtonPersonalizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Chama a Tela de Personalizar
+                Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+                startActivity(intent);
+            }
+        });
+
         //Botão de ação
         mButton = findViewById(R.id.button);
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -38,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
                     int ano = mNumberPicker.getValue();
 
                     if (checkedRadioid == R.id.radioButtonSalvar) {
-                        adicionarValor(ano,valor);
-                    } else if (checkedRadioid == R.id.radioButtonExcluir){
-                        excluirValor(ano,valor);
+                        adicionarValor(ano, valor);
+                    } else if (checkedRadioid == R.id.radioButtonExcluir) {
+                        excluirValor(ano, valor);
                     }
                     exibirSaldo(ano);
                 }
@@ -74,15 +88,27 @@ public class MainActivity extends AppCompatActivity {
         mTextViewSaldo = findViewById(R.id.textViewSaldo);
     }
 
-    private void adicionarValor(int ano, float valor){
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String nomePersonalizado = getSharedPreferences(ARQUIVO_MEUS_DADOS, Context.MODE_PRIVATE).getString("NomeEmpresa", null);
+        if (nomePersonalizado != null) {
+            setTitle(nomePersonalizado);
+        }
+
+        int ano = mNumberPicker.getValue();
+        exibirSaldo(ano);
+    }
+
+    private void adicionarValor(int ano, float valor) {
         SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_MEUS_DADOS, Context.MODE_PRIVATE);
-        float valAtual = sharedPreferences.getFloat(String.valueOf(ano),0);
+        float valAtual = sharedPreferences.getFloat(String.valueOf(ano), 0);
         float novoValor = valAtual + valor;
         sharedPreferences.edit().putFloat(String.valueOf(ano), novoValor).apply();
         exibirSaldo(ano);
-        Toast.makeText(getApplicationContext(), "Valor Adicionado: R$ "+valor, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Valor Adicionado: R$ " + valor, Toast.LENGTH_SHORT).show();
     }
-
 
 
     private void excluirValor(int ano, float valor) {
@@ -102,9 +128,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void exibirSaldo(int ano){
+    private void exibirSaldo(int ano) {
         SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_MEUS_DADOS, Context.MODE_PRIVATE);
-        float valAtual = sharedPreferences.getFloat(String.valueOf(ano),0);
+        float valAtual = sharedPreferences.getFloat(String.valueOf(ano), 0);
         mTextViewSaldo.setText(String.format("%s %s", getString(R.string.RS), valAtual));
     }
 
